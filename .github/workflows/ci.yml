@@ -43,4 +43,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/express-server:latest
+          tags: ghcr.io/${{ github.repository }}:latest
