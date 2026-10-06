@@ -2,10 +2,9 @@ name: Fast Feedback Checks
 
 on:
   push:
-    branches-ignore: [ main ]
+    branches-ignore: [main]
 
 jobs:
-
   run-tests:
     uses: ./.github/workflows/test-validate.yml
     with:
