@@ -34,4 +34,8 @@ jobs:
 
       - name: Health Endpoint Check
         run: |
-          curl --fail --retry 15 --retry-delay http://localhost:${{ inputs.server-port }}/endpoint
+          curl \
+            --fail \
+            --retry 15 \
+            --retry-delay 1 \
+            "http://localhost:${{ inputs.server-port }}/endpoint"
