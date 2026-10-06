@@ -38,4 +38,4 @@ jobs:
             --fail \
             --retry 15 \
             --retry-delay 1 \
-            "http://localhost:${{ inputs.server-port }}/endpoint"
+            "http://localhost:${{ inputs.server-port }}/health"
