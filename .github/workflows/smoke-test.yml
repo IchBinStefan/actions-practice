@@ -30,7 +30,7 @@ jobs:
 
       - name: Start Express Server
         run: |
-          npm start &
+          npm start & echo $! > server.pid
 
       - name: Health Endpoint Check
         run: |
@@ -39,3 +39,11 @@ jobs:
             --retry 15 \
             --retry-delay 1 \
             "http://localhost:${{ inputs.server-port }}/health"
+
+      - name: Server Cleanup
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill -15 "$(cat server.pid)" &>/dev/null || true
+            rm -f server.pid
+          fi
