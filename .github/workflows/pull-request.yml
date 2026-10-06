@@ -1,8 +1,8 @@
-name: Fast Feedback Checks
+name: Testing on Pull Request
 
 on:
-  push:
-    branches-ignore: [main]
+  pull_request:
+    branches: [develop]
 
 jobs:
   run-tests:

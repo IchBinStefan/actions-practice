@@ -9,7 +9,6 @@ on:
         default: '20'
 
 jobs:
-
   lint-and-format:
     name: Lint and Format Checks
     runs-on: ubuntu-latest

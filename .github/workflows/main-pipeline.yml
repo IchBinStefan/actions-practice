@@ -1,8 +1,8 @@
-name: Fast Feedback Checks
+name: Merge Main Pipeline
 
 on:
   push:
-    branches-ignore: [main]
+    branches: [main]
 
 jobs:
   run-tests:
@@ -16,3 +16,7 @@ jobs:
     with:
       node-version: 24
       server-port: 3000
+
+  build-image:
+    needs: run-tests
+    uses: ./.github/workflows/build-docker.yml
