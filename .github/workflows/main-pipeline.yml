@@ -1,0 +1,22 @@
+name: Merge Main Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  run-tests:
+    uses: ./.github/workflows/test-validate.yml
+    with:
+      node-version: 24
+
+  smoke-test:
+    needs: run-tests
+    uses: ./.github/workflows/smoke-test.yml
+    with:
+      node-version: 24
+      server-port: 3000
+
+  build-image:
+    needs: run-tests
+    uses: ./.github/workflows/build-docker.yml
