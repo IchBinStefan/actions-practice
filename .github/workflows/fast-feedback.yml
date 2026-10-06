@@ -1,0 +1,19 @@
+name: Fast Feedback Checks
+
+on:
+  push:
+    branches-ignore: [ main ]
+
+jobs:
+
+  run-tests:
+    uses: ./.github/workflows/test-validate.yml
+    with:
+      node-version: 24
+
+  smoke-test:
+    needs: run-tests
+    uses: ./.github/workflows/smoke-test.yml
+    with:
+      node-version: 24
+      server-port: 3000
