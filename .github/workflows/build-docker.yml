@@ -60,3 +60,8 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ env.REPO_NAME }}:latest
+
+      - name: Cleanup Docker Objects
+        if: always()
+        run: |
+          docker system prune -af --volumes
