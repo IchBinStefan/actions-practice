@@ -22,5 +22,5 @@ jobs:
       server-port: 3000
 
   build-image:
-    needs: run-tests
+    needs: smoke-test
     uses: ./.github/workflows/build-docker.yml
