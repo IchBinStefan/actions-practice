@@ -78,7 +78,7 @@ jobs:
           name: Health Endpoint Check
           command: |
             curl \
-              -4
+              -4 \
               --fail \
               --retry 15 \
               --retry-delay 1 \
