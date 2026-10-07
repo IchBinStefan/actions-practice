@@ -9,7 +9,7 @@ orbs:
 executors:
   linux:
     machine:
-      image: ubuntu2404:current
+      image: ubuntu-2404:current
     resource_class: medium
   macos:
     macos:
