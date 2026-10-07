@@ -74,6 +74,7 @@ jobs:
       - run:
           name: Start Express Server
           command: npm start & echo $! > server.pid
+          background: true
       - run:
           name: Health Endpoint Check
           command: |
@@ -82,7 +83,7 @@ jobs:
               --retry 15 \
               --retry-delay 1 \
               --retry-connrefused \
-              "http://127.0.0.1:<< parameters.server-port >>/health"
+              "http://localhost:<< parameters.server-port >>/health"
       - run:
           name: Server Cleanup
           when: always
