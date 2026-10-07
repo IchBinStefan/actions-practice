@@ -98,10 +98,10 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - docker/login:
+      - docker/check:
           registry: ghcr.io
-          username: GHCR_USERNAME
-          password: GHCR_PASSWORD
+          docker_username: GHCR_USERNAME
+          docker_password: GHCR_PASSWORD
       - docker/build:
           docker_context: .
           dockerfile: Dockerfile
