@@ -124,8 +124,8 @@ jobs:
       - run:
           name: Push Docker Image
           command: |
-              docker tag ${GHCR_USERNAME}/actions-practice:latest-circle ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
-              docker push ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
+            docker tag ${GHCR_USERNAME}/actions-practice:latest-circle ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
+            docker push ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
       - run:
           name: Logout out of GHCR
           when: always
