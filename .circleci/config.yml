@@ -1,0 +1,114 @@
+# This config was automatically generated from your source code
+# Stacks detected: cicd:github-actions:.github/workflows,deps:node:.,test:jest:
+
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+executors:
+  linux:
+    machine:
+      image: ubuntu2604:current
+  macos:
+    macos:
+      xcode: '27.0.0'
+
+jobs:
+  format-and-lint:
+    description: Check Format and Lint Rules
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Run Linter Check
+          command: npm run lint
+      - run:
+          name: Run Formatter Check
+          command: npm run format:check
+
+  run-tests:
+    description: Run Unit Tests
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Run Unit Tests
+          environment:
+            NODE_ENV: test
+          command: npm test
+
+  smoke-test:
+    description: Smoke Test the Application
+    parameters:
+      node:
+        type: string
+        default: '24.11.0'
+      os:
+        type: string
+        enum: ['linux', 'macos']
+      server-port:
+        type: string
+        default: '3000'
+    executor: << parameters.os >>
+    steps:
+      - checkout
+      - node/install:
+          node-version: << parameters.node >>
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - run:
+          name: Start Express Server
+          command: npm start & echo $! > server.pid
+      - run:
+          name: Health Endpoint Check
+          command: |
+            curl \
+              --fail \
+              --retry 15 \
+              --retry-delay 1 \
+              "http://localhost:<< parameters.server-port >>/health"
+      - run:
+          name: Server Cleanup
+          when: always
+          command: |
+            if [ -f server.pid ]; then
+              kill -15 "$(cat server.pid)" &>/dev/null || true
+              rm -f server.pid
+            fi
+
+  build-test-push-image:
+    description: Build, Test, and Push the OCI Image to GHCR
+    executor: linux
+    steps:
+      - run: echo Hello
+
+workflows:
+  version: 2
+  facultatea-de-instalatii:
+    jobs:
+      - format-and-lint
+      - run-tests
+      - smoke-test:
+          matrix:
+            parameters:
+              os: ['linux', 'macos']
+              requires:
+                - format-and-lint
+                - run-tests
+      - build-test-push-image:
+          requires:
+            - smoke-test
