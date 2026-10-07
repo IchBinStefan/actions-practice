@@ -113,7 +113,7 @@ jobs:
             docker run -d \
               --name test-container \
               -p 3000:3000 \
-              ghcr.io/${GHCR_USERNAME}/actions-practice
+              ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
             sleep 5
             curl --fail --retry 15 --retry-delay 1 --retry-connrefused \
               "http://localhost:3000/health"
@@ -128,7 +128,7 @@ jobs:
       - run:
           name: Logout out of GHCR
           when: always
-          command: docker logout ghcr.io
+          command: docker logout ghcr.io || true
       - run:
           name: Cleanup Docker Objects
           when: always
