@@ -123,9 +123,7 @@ jobs:
           command: docker rm -f test-container || true
       - run:
           name: Push Docker Image
-          command: |
-            docker image ls
-            docker push ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
+          command: docker push ${GHCR_USERNAME}/actions-practice:latest-circle
       - run:
           name: Logout out of GHCR
           when: always
