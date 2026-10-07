@@ -122,12 +122,9 @@ jobs:
           when: always
           command: docker rm -f test-container || true
       - run:
-          name: List Docker images
-          command: docker images --all
-      - docker/push:
-          registry: ghcr.io
-          image: ${GHCR_USERNAME}/actions-practice
-          tag: latest-circle
+          name: Push Docker Image
+          command: |
+              docker push ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
       - run:
           name: Logout out of GHCR
           when: always
