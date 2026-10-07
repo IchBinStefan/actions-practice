@@ -5,6 +5,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5
+  docker: circleci/docker@4.0.1
 
 executors:
   linux:
@@ -93,9 +94,44 @@ jobs:
 
   build-test-push-image:
     description: Build, Test, and Push the OCI Image to GHCR
-    executor: linux
+    executor: docker/docker
     steps:
-      - run: echo Hello
+      - checkout
+      - docker/login:
+          registry: ghcr.io
+          username: GHCR_USERNAME
+          password: GHCR_PASSWORD
+      - docker/build:
+          docker_context: .
+          dockerfile: Dockerfile
+          image: ghcr.io/${GHCR_USERNAME}/actions-practice
+          tag: latest-circle
+      - run:
+          name: Test Docker Container
+          command: |
+            docker run -d \
+              --name test-container \
+              -p 3000:3000 \
+              ghcr.io/${GHCR_USERNAME}/actions-practice
+            sleep 5
+            curl --fail --retry 15 --retry-delay 1 --retry-connrefused \
+              "http://localhost:3000/health"
+      - run:
+          name: Cleanup Test Container
+          when: always
+          command: docker rm -f test-container || true
+      - docker/push:
+          registry: ghcr.com
+          image: ghcr.io/${GHCR_USERNAME}/actions-practice
+          tag: latest-circle
+      - run:
+          name: Logout out of GHCR
+          when: always
+          command: docker logout ghcr.io
+      - run:
+          name: Cleanup Docker Objects
+          when: always
+          command: docker system prune -af --volumes
 
 workflows:
   version: 2
@@ -111,5 +147,7 @@ workflows:
             parameters:
               os: ['linux', 'macos']
       - build-test-push-image:
+          context: ghcr-credentials
+          type: approval
           requires:
             - smoke-test
