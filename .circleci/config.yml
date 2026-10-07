@@ -9,7 +9,7 @@ orbs:
 executors:
   linux:
     machine:
-      image: ubuntu2604:current
+      image: ubuntu2404:current
   macos:
     macos:
       xcode: '27.0.0'
