@@ -78,10 +78,10 @@ jobs:
           name: Health Endpoint Check
           command: |
             curl \
-              -4 \
               --fail \
               --retry 15 \
               --retry-delay 1 \
+              --retry-connrefused \
               "http://localhost:<< parameters.server-port >>/health"
       - run:
           name: Server Cleanup
