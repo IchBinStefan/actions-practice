@@ -105,7 +105,7 @@ jobs:
       - docker/build:
           docker_context: .
           dockerfile: Dockerfile
-          image: ghcr.io/${GHCR_USERNAME}/actions-practice
+          image: ${GHCR_USERNAME}/actions-practice
           tag: latest-circle
       - run:
           name: Test Docker Container
@@ -113,7 +113,7 @@ jobs:
             docker run -d \
               --name test-container \
               -p 3000:3000 \
-              ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
+              ${GHCR_USERNAME}/actions-practice:latest-circle
             sleep 5
             docker exec test-container \
               node -e "fetch('http://localhost:3000/health').then(r => r.ok || process.exit(1))"
@@ -122,8 +122,8 @@ jobs:
           when: always
           command: docker rm -f test-container || true
       - docker/push:
-          registry: ghcr.com
-          image: ghcr.io/${GHCR_USERNAME}/actions-practice
+          registry: ghcr.io
+          image: ${GHCR_USERNAME}/actions-practice
           tag: latest-circle
       - run:
           name: Logout out of GHCR
