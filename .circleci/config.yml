@@ -146,8 +146,11 @@ workflows:
           matrix:
             parameters:
               os: ['linux', 'macos']
-      - build-test-push-image:
-          context: ghcr-credentials
+      - approve-ghcr-push:
           type: approval
           requires:
             - smoke-test
+      - build-test-push-image:
+          context: ghcr-credentials
+          requires:
+            - approve-ghcr-push
