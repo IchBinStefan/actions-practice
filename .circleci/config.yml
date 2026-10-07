@@ -121,6 +121,9 @@ jobs:
           name: Cleanup Test Container
           when: always
           command: docker rm -f test-container || true
+      - run:
+          name: List Docker images
+          command: docker images --all
       - docker/push:
           registry: ghcr.io
           image: ${GHCR_USERNAME}/actions-practice
