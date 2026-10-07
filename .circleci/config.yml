@@ -103,12 +103,12 @@ workflows:
       - format-and-lint
       - run-tests
       - smoke-test:
+          requires:
+            - format-and-lint
+            - run-tests
           matrix:
             parameters:
               os: ['linux', 'macos']
-              requires:
-                - format-and-lint
-                - run-tests
       - build-test-push-image:
           requires:
             - smoke-test
