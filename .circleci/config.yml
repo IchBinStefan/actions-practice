@@ -115,6 +115,7 @@ jobs:
               -p 3000:3000 \
               ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
             sleep 5
+            docker logs test-container
             curl --fail --retry 15 --retry-delay 1 --retry-connrefused \
               "http://localhost:3000/health"
       - run:
