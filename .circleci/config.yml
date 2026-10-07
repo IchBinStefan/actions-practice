@@ -97,6 +97,7 @@ jobs:
     executor: docker/docker
     steps:
       - checkout
+      - setup_remote_docker
       - docker/login:
           registry: ghcr.io
           username: GHCR_USERNAME
