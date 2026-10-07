@@ -97,7 +97,6 @@ jobs:
     executor: docker/docker
     steps:
       - checkout
-      - setup_remote_docker
       - docker/check:
           registry: ghcr.io
           docker_username: GHCR_USERNAME
@@ -115,7 +114,8 @@ jobs:
               -p 3000:3000 \
               ghcr.io/${GHCR_USERNAME}/actions-practice:latest-circle
             sleep 5
-            docker exec test-container curl --fail "http://localhost:3000/health"
+            curl --fail --retry 15 --retry-delay 1 --retry-connrefused \
+              "http://localhost:3000/health"
       - run:
           name: Cleanup Test Container
           when: always
