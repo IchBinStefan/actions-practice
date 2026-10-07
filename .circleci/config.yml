@@ -72,7 +72,7 @@ jobs:
           name: Install Dependencies
           command: npm ci
       - run:
-          name: Start Express Server
+          name: Start Express Server and Health Check
           command: |
             npm start & echo $! > server.pid
             sleep 5
